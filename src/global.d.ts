@@ -3,4 +3,7 @@ declare type ToastHandle = import("./components/toast").ToastHandle
 
 declare module globalThis {
   var $toast: ToastHandle
+  var config: {
+    baseUrl: string
+  }
 }

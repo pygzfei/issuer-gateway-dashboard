@@ -1,13 +1,13 @@
-import { FC } from "react"
-import LoadingButton from "@mui/lab/LoadingButton"
 import PlaylistAddSharpIcon from "@mui/icons-material/PlaylistAddSharp"
+import LoadingButton from "@mui/lab/LoadingButton"
 import Box from "@mui/material/Box/Box"
 import Typography from "@mui/material/Typography/Typography"
-import { useAction, useBindDomain } from "./hooks"
-import DeleteDialog from "./components/DeleteDialog"
+import { FC } from "react"
 import BindingDomainDialog from "./components/BindingDomainDialog"
-import Pagination from "./components/Pagination"
 import DataTable from "./components/DataTable"
+import DeleteDialog from "./components/DeleteDialog"
+import Pagination from "./components/Pagination"
+import { useAction, useBindDomain } from "./hooks"
 
 const Certificate: FC = () => {
   const {

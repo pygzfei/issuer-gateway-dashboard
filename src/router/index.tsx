@@ -1,11 +1,11 @@
-import { FC } from "react"
-import { Navigate, Route, Routes } from "react-router-dom"
-import Certificate from "@/pages/certificate"
-import Profile from "@/pages/profile"
-import Login from "@/pages/login"
-import NotFound from "@/pages/not-found/NotFound"
 import MainLayout from "@/components/layout/main"
 import RequireAuth from "@/components/requreAuth.tsx"
+import Certificate from "@/pages/certificate"
+import Login from "@/pages/login"
+import NotFound from "@/pages/not-found/NotFound"
+import Profile from "@/pages/profile"
+import { FC } from "react"
+import { Navigate, Route, Routes } from "react-router-dom"
 
 const RenderRoutes: FC = () => {
   return (

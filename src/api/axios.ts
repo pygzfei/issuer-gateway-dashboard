@@ -1,9 +1,9 @@
-import axios from "axios"
 import history from "@/utils/router/history"
 import { storage, StorageKeys } from "@/utils/storage"
+import axios from "axios"
 
 const instance = axios.create({
-  baseURL: "http://192.167.167.167:9090",
+  baseURL: window.config.baseUrl,
   timeout: 10000,
   headers: {
     "Content-Type": "application/json; charset=utf-8",
