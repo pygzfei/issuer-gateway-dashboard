@@ -1,11 +1,11 @@
-import { FC } from "react"
-import { Link } from "react-router-dom"
+import notFoundImage from "@/assets/images/404.jpg"
 import { useTheme } from "@mui/material"
-import Grid from "@mui/system/Unstable_Grid"
+import Box from "@mui/material/Box/Box"
 import Stack from "@mui/material/Stack/Stack"
 import Typography from "@mui/material/Typography/Typography"
-import Box from "@mui/material/Box/Box"
-import notFoundImage from "@/assets/images/404.jpg"
+import Grid from "@mui/system/Unstable_Grid"
+import { FC } from "react"
+import { Link } from "react-router-dom"
 import * as styles from "./styles"
 
 const NotFound: FC = () => {
