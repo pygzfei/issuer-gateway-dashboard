@@ -29,7 +29,7 @@ const NotFound: FC = () => {
           />
         </Box>
         <Link to="/" replace css={styles.goBackButton}>
-          返回首页
+          Go Back
         </Link>
       </Stack>
     </Grid>
