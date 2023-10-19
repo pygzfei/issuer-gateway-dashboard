@@ -39,7 +39,7 @@ const Certificate: FC = () => {
   } = useBindDomain({ getCertsList })
 
   return (
-    <Box minHeight="100%" display="flex" flexDirection="column">
+    <Box display="flex" flexDirection="column" flex={1}>
       <Typography
         mb={1.5}
         display="flex"

@@ -33,9 +33,15 @@ const MainLayout: FC = () => {
         <Divider />
         <SideBar tags={tags} />
       </Drawer>
-      <Box component="main" display="flex" flexDirection="column" flexGrow={1}>
+      <Box
+        component="main"
+        display="flex"
+        flexDirection="column"
+        flexGrow={1}
+        minHeight="100vh"
+      >
         <DrawerHeaderContainer />
-        <Box flex={1} p={1.5} minHeight="100%">
+        <Box display="flex" flexDirection="column" flex={1} p={1.5}>
           <Outlet />
         </Box>
       </Box>
