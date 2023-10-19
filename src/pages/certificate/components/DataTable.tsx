@@ -1,5 +1,7 @@
 import { Certs } from "@/entity/types"
 import { formatDateTime } from "@/utils/time"
+import AcUnitIcon from "@mui/icons-material/AcUnit"
+import { SvgIconOwnProps } from "@mui/material"
 import Paper from "@mui/material/Paper/Paper"
 import Table from "@mui/material/Table/Table"
 import TableBody from "@mui/material/TableBody/TableBody"
@@ -7,13 +9,52 @@ import TableContainer from "@mui/material/TableContainer/TableContainer"
 import TableHead from "@mui/material/TableHead/TableHead"
 import TableRow from "@mui/material/TableRow/TableRow"
 import Tooltip from "@mui/material/Tooltip/Tooltip"
-import { FC } from "react"
+import { FC, useMemo } from "react"
 import { DOMAIN_ROW_MAX_WIDTH, tableCellConfig } from "../hooks"
 import * as styles from "../styles"
 import OperationCell from "./OperationCell"
 import StyledTableCell from "./StyledTableCell"
 import StyledTableRow from "./StyledTableRow"
 import TableSkeleton from "./TableSkeleton"
+
+const StatusSign: FC<{ expire: number }> = ({ expire }) => {
+  const signInfo: {
+    message: string
+    color: SvgIconOwnProps["color"]
+  } = useMemo(() => {
+    const timestamp = expire * 1000
+    const now = Date.now()
+    const leftDay = Math.floor((timestamp - now) / (10 * 24 * 60 * 60 * 1000))
+    if (!timestamp) {
+      return {
+        message: "No certificate",
+        color: "disabled",
+      }
+    }
+    if (timestamp < now) {
+      return {
+        message: "certificate expired",
+        color: "error",
+      }
+    }
+    if (timestamp - now <= 10 * 24 * 60 * 60 * 1000) {
+      return {
+        message: `certificate will be expired in ${leftDay}`,
+        color: "warning",
+      }
+    }
+    return {
+      message: "Normal",
+      color: "success",
+    }
+  }, [expire])
+
+  return (
+    <Tooltip title={signInfo.message} placement="top-start">
+      <AcUnitIcon color={signInfo.color} />
+    </Tooltip>
+  )
+}
 
 const DataTableBody: FC<{
   finishInit: boolean
@@ -35,7 +76,7 @@ const DataTableBody: FC<{
               scope="row"
               sx={{ maxWidth: DOMAIN_ROW_MAX_WIDTH, overflow: "hidden" }}
             >
-              <Tooltip title={cert.domain} placement="bottom-start">
+              <Tooltip title={cert.domain} placement="top-start">
                 <p css={styles.domainCell}>{cert.domain}</p>
               </Tooltip>
             </StyledTableCell>
@@ -43,7 +84,7 @@ const DataTableBody: FC<{
               {cert.target}
             </StyledTableCell>
             <StyledTableCell component="th" scope="row" align="center">
-              {cert.expire}
+              <StatusSign expire={cert.expire} />
             </StyledTableCell>
             <StyledTableCell component="th" scope="row" align="center">
               {`${formatDateTime(cert.created_at * 1000, "yyyy-MM-dd")}`}
