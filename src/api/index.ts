@@ -1,6 +1,6 @@
+import { ApiResult, Certs } from "@/entity/types"
 import axios from "./axios"
 import { getResponseError, tranResponse } from "./lib"
-import { ApiResult, Certs } from "@/entity/types"
 
 export const loginRequest = async ({
   name,
@@ -30,7 +30,7 @@ export const getCertsListRequest = async ({
 }: {
   page: number
   size: number
-}): Promise<ApiResult<{ certs: Certs[]; total: number }>> => {
+}): Promise<ApiResult<{ certs?: Certs[]; total: number }>> => {
   try {
     const result = await axios.request({
       url: "/api/certs",

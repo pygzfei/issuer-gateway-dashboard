@@ -6,7 +6,7 @@ import { FC } from "react"
 import BindingDomainDialog from "./components/BindingDomainDialog"
 import DataTable from "./components/DataTable"
 import DeleteDialog from "./components/DeleteDialog"
-import Pagination from "./components/Pagination"
+import PaginationBar from "./components/Pagination"
 import { useAction, useBindDomain } from "./hooks"
 
 const Certificate: FC = () => {
@@ -16,6 +16,7 @@ const Certificate: FC = () => {
     currentPage,
     openDeleteDialog,
     deleteDialogData,
+    totalPage,
     getCertsList,
     onDeleteItem,
     onConfirmDelete,
@@ -63,9 +64,9 @@ const Certificate: FC = () => {
         onApplyCert={onApplyCert}
         onDeleteItem={onDeleteItem}
       />
-      <Pagination
-        page={currentPage.current}
-        total={certsData.total}
+      <PaginationBar
+        currentPage={currentPage.current}
+        totalPage={totalPage}
         onPageChange={onPageChange}
       />
 

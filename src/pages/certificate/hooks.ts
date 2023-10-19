@@ -3,7 +3,7 @@ import { Certs } from "@/entity/types"
 import { SelectChangeEvent } from "@mui/material/Select/SelectInput"
 import { SxProps, Theme } from "@mui/material/styles"
 import { TableCellProps } from "@mui/material/TableCell/TableCell"
-import { ChangeEvent, useEffect, useRef, useState } from "react"
+import { ChangeEvent, useEffect, useMemo, useRef, useState } from "react"
 
 export interface OnDeleteParams {
   id: number
@@ -76,6 +76,10 @@ export const useAction = () => {
     content: "",
   })
 
+  const totalPage = useMemo(() => {
+    return Math.ceil(certsData.total / PAGE_SIZE)
+  }, [certsData.total])
+
   // TODO: 等待接口
   const onDeleteItem = (params: OnDeleteParams) => {
     deleteDialogData.current = {
@@ -95,8 +99,8 @@ export const useAction = () => {
   }
 
   const onPageChange = (_: ChangeEvent<unknown> | null, value: number) => {
-    // <TablePagination /> page第一页下标是0
-    currentPage.current = value + 1
+    if (currentPage.current === value) return
+    currentPage.current = value
     getCertsList()
   }
 
@@ -107,7 +111,7 @@ export const useAction = () => {
     })
     if (success && data) {
       setCertsData({
-        certsList: data?.certs,
+        certsList: data?.certs ?? [],
         total: data?.total,
       })
     } else {
@@ -140,6 +144,7 @@ export const useAction = () => {
     finishInit,
     openDeleteDialog,
     deleteDialogData,
+    totalPage,
     getCertsList,
     onDeleteItem,
     onConfirmDelete,

@@ -1,23 +1,19 @@
+import Pagination from "@mui/material/Pagination/Pagination"
 import { ChangeEvent, FC } from "react"
-import TablePagination from "@mui/material/TablePagination/TablePagination"
-import { PAGE_SIZE } from "../hooks"
 
-const Pagination: FC<{
-  page: number
-  total: number
+const PaginationBar: FC<{
+  currentPage: number
+  totalPage: number
   onPageChange: (_: ChangeEvent<unknown> | null, value: number) => void
-}> = ({ page, total, onPageChange }) => {
+}> = ({ currentPage, totalPage, onPageChange }) => {
   return (
-    <TablePagination
-      sx={{ mt: "auto" }}
-      component="div"
-      rowsPerPageOptions={[PAGE_SIZE]}
-      count={total}
-      rowsPerPage={PAGE_SIZE}
-      page={page - 1}
-      onPageChange={onPageChange}
+    <Pagination
+      sx={{ mt: "auto", ml: "auto" }}
+      count={totalPage}
+      page={currentPage}
+      onChange={onPageChange}
     />
   )
 }
 
-export default Pagination
+export default PaginationBar
