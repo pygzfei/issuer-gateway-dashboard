@@ -5,12 +5,6 @@ import { SxProps, Theme } from "@mui/material/styles"
 import { TableCellProps } from "@mui/material/TableCell/TableCell"
 import { ChangeEvent, useEffect, useMemo, useRef, useState } from "react"
 
-export interface OnDeleteParams {
-  id: number
-  title: string
-  content: string
-}
-
 export interface ValidStatus {
   domainError: boolean
   emailError: boolean
@@ -65,37 +59,27 @@ export const useAction = () => {
     total: 0,
   })
 
-  const [openDeleteDialog, setOpenDeleteDialog] = useState<boolean>(false)
-  const deleteDialogData = useRef<{
-    id: number
-    title: string
-    content: string
-  }>({
-    id: 0,
-    title: "",
-    content: "",
-  })
+  const [openEditDrawer, setOpenEditDrawer] = useState<boolean>(false)
+  const currentDeletedCert = useRef<Certs | null>(null)
 
   const totalPage = useMemo(() => {
     return Math.ceil(certsData.total / PAGE_SIZE)
   }, [certsData.total])
 
   // TODO: 等待接口
-  const onDeleteItem = (params: OnDeleteParams) => {
-    deleteDialogData.current = {
-      id: params.id,
-      title: params.title,
-      content: params.content,
-    }
-    setOpenDeleteDialog(true)
+  const onEditItem = (cert: Certs) => {
+    currentDeletedCert.current = cert
+    setOpenEditDrawer(true)
   }
 
   const onConfirmDelete = () => {
-    setOpenDeleteDialog(false)
+    currentDeletedCert.current = null
+    setOpenEditDrawer(false)
   }
 
   const onCancelDelete = () => {
-    setOpenDeleteDialog(false)
+    currentDeletedCert.current = null
+    setOpenEditDrawer(false)
   }
 
   const onPageChange = (_: ChangeEvent<unknown> | null, value: number) => {
@@ -125,8 +109,7 @@ export const useAction = () => {
 
   // TODO: 待对接
   const onApplyCert = async (id: number) => {
-    const res = await applyCertRequest(id)
-    console.log({ res })
+    await applyCertRequest(id)
   }
 
   const init = async () => {
@@ -142,11 +125,10 @@ export const useAction = () => {
     currentPage,
     certsData,
     finishInit,
-    openDeleteDialog,
-    deleteDialogData,
+    openEditDrawer,
     totalPage,
     getCertsList,
-    onDeleteItem,
+    onEditItem,
     onConfirmDelete,
     onCancelDelete,
     onPageChange,

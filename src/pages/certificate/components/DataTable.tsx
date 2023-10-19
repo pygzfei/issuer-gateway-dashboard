@@ -8,7 +8,7 @@ import TableHead from "@mui/material/TableHead/TableHead"
 import TableRow from "@mui/material/TableRow/TableRow"
 import Tooltip from "@mui/material/Tooltip/Tooltip"
 import { FC } from "react"
-import { DOMAIN_ROW_MAX_WIDTH, OnDeleteParams, tableCellConfig } from "../hooks"
+import { DOMAIN_ROW_MAX_WIDTH, tableCellConfig } from "../hooks"
 import * as styles from "../styles"
 import OperationCell from "./OperationCell"
 import StyledTableCell from "./StyledTableCell"
@@ -20,8 +20,8 @@ const DataTableBody: FC<{
   certsList: Certs[]
   total: number
   onApplyCert: (id: number) => Promise<void>
-  onDeleteItem: (params: OnDeleteParams) => void
-}> = ({ finishInit, certsList, total, onApplyCert, onDeleteItem }) => {
+  onEditItem: (cert: Certs) => void
+}> = ({ finishInit, certsList, total, onApplyCert, onEditItem }) => {
   if (!finishInit) {
     return <TableSkeleton />
   }
@@ -51,7 +51,7 @@ const DataTableBody: FC<{
             <OperationCell
               cert={cert}
               onApplyCert={onApplyCert}
-              onDeleteItem={onDeleteItem}
+              onEditItem={onEditItem}
             />
           </StyledTableRow>
         ))
@@ -76,8 +76,8 @@ const DataTable: FC<{
   certsList: Certs[]
   total: number
   onApplyCert: (id: number) => Promise<void>
-  onDeleteItem: (params: OnDeleteParams) => void
-}> = ({ finishInit, certsList, total, onApplyCert, onDeleteItem }) => {
+  onEditItem: (cert: Certs) => void
+}> = ({ finishInit, certsList, total, onApplyCert, onEditItem }) => {
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 700 }}>
@@ -99,7 +99,7 @@ const DataTable: FC<{
           certsList={certsList}
           total={total}
           onApplyCert={onApplyCert}
-          onDeleteItem={onDeleteItem}
+          onEditItem={onEditItem}
         />
       </Table>
     </TableContainer>

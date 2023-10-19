@@ -5,14 +5,14 @@ import PlaylistAddSharpIcon from "@mui/icons-material/PlaylistAddSharp"
 import Refresh from "@mui/icons-material/Refresh"
 import LoadingButton from "@mui/lab/LoadingButton/LoadingButton"
 import { FC } from "react"
-import { OnDeleteParams, OPERATION_ROW_WIDTH } from "../hooks"
+import { OPERATION_ROW_WIDTH } from "../hooks"
 import StyledTableCell from "./StyledTableCell"
 
 const OperationCell: FC<{
   cert: Certs
   onApplyCert: (id: number) => Promise<void>
-  onDeleteItem: (params: OnDeleteParams) => void
-}> = ({ cert, onApplyCert, onDeleteItem }) => {
+  onEditItem: (cert: Certs) => void
+}> = ({ cert, onApplyCert, onEditItem }) => {
   return (
     <StyledTableCell
       component="th"
@@ -62,13 +62,7 @@ const OperationCell: FC<{
       </LoadingButton>
       <LoadingButton
         size="small"
-        onClick={() =>
-          onDeleteItem({
-            id: cert.id,
-            title: "",
-            content: `确认删除 ${cert.domain}`,
-          })
-        }
+        onClick={() => onEditItem(cert)}
         endIcon={<EditIcon />}
         loading={false}
         loadingPosition="end"

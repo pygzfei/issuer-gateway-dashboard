@@ -5,7 +5,6 @@ import Typography from "@mui/material/Typography/Typography"
 import { FC } from "react"
 import BindingDomainDialog from "./components/BindingDomainDialog"
 import DataTable from "./components/DataTable"
-import DeleteDialog from "./components/DeleteDialog"
 import PaginationBar from "./components/Pagination"
 import { useAction, useBindDomain } from "./hooks"
 
@@ -14,13 +13,9 @@ const Certificate: FC = () => {
     certsData,
     finishInit,
     currentPage,
-    openDeleteDialog,
-    deleteDialogData,
     totalPage,
     getCertsList,
-    onDeleteItem,
-    onConfirmDelete,
-    onCancelDelete,
+    onEditItem,
     onPageChange,
     onApplyCert,
   } = useAction()
@@ -62,7 +57,7 @@ const Certificate: FC = () => {
         certsList={certsData.certsList}
         total={certsData.total}
         onApplyCert={onApplyCert}
-        onDeleteItem={onDeleteItem}
+        onEditItem={onEditItem}
       />
       <PaginationBar
         currentPage={currentPage.current}
@@ -80,13 +75,6 @@ const Certificate: FC = () => {
         onConfirm={onSubmit}
         onChangeProtocol={onChangeProtocol}
         onClose={onClose}
-      />
-      <DeleteDialog
-        open={openDeleteDialog}
-        title={deleteDialogData.current.title}
-        content={deleteDialogData.current.content}
-        onConfirm={onConfirmDelete}
-        onCancel={onCancelDelete}
       />
     </Box>
   )
