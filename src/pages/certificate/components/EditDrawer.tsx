@@ -4,12 +4,10 @@ import { formatDateTime } from "@/utils/time"
 import LoadingButton from "@mui/lab/LoadingButton/LoadingButton"
 import Box from "@mui/material/Box/Box"
 import Drawer from "@mui/material/Drawer/Drawer"
-import InputAdornment from "@mui/material/InputAdornment/InputAdornment"
 import OutlinedInput from "@mui/material/OutlinedInput/OutlinedInput"
 import { useTheme } from "@mui/material/styles"
 import Typography from "@mui/material/Typography/Typography"
-import { ChangeEvent, FC, useMemo } from "react"
-import { ProtocolType } from "../hooks"
+import { ChangeEvent, FC } from "react"
 
 interface EditDrawerProps {
   cert: Certs | null
@@ -23,20 +21,12 @@ const DrawerItem: FC<{
   name: string
   value?: string
   disabled?: boolean
-  startAdornment?: string
   onchange?: (e: ChangeEvent<HTMLInputElement>) => void
-}> = ({ name, value = "", disabled, startAdornment, onchange }) => {
+}> = ({ name, value = "", disabled, onchange }) => {
   return (
     <section>
       <Typography component="p">{name}</Typography>
       <OutlinedInput
-        startAdornment={
-          startAdornment && (
-            <InputAdornment position="start" sx={{ mr: "10px" }}>
-              {startAdornment}
-            </InputAdornment>
-          )
-        }
         value={value}
         placeholder="Domain"
         fullWidth
@@ -55,11 +45,6 @@ const EditDrawer: FC<EditDrawerProps> = ({
   onClose,
 }) => {
   const theme = useTheme()
-  const targetProtocolType = useMemo(() => {
-    return cert?.target.includes(ProtocolType.http)
-      ? ProtocolType.http
-      : ProtocolType.https
-  }, [cert?.target])
   return (
     <>
       <Drawer anchor="right" open={open} onClose={onClose}>
@@ -76,7 +61,6 @@ const EditDrawer: FC<EditDrawerProps> = ({
           <DrawerItem
             name="Server:"
             value={cert?.target}
-            startAdornment={targetProtocolType}
             onchange={onChangeTarget}
           />
           <DrawerItem

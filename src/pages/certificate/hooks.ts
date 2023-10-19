@@ -218,16 +218,9 @@ export const useEditDomain = ({
 }) => {
   const [currentEditCert, setCurrentEditCert] = useState<Certs | null>(null)
   const [openEditDrawer, setOpenEditDrawer] = useState<boolean>(false)
-  const certRef = useRef<Certs | null>(null)
 
   const onOpenEditDrawer = (cert: Certs) => {
-    certRef.current = cert
-    setCurrentEditCert({
-      ...cert,
-      target: cert.target
-        .replace(ProtocolType.http, "")
-        .replace(ProtocolType.https, ""),
-    })
+    setCurrentEditCert(cert)
     setOpenEditDrawer(true)
   }
 
@@ -245,8 +238,8 @@ export const useEditDomain = ({
 
   const onSubmit = async ({ id, target }: { id?: number; target?: string }) => {
     if (!id || !target) return
-    const protocol = `${new URL(certRef.current?.target ?? "")?.protocol}//`
-    const targetPass = TARGET_REGEX.test(target)
+    const reg = /^(https?:\/\/)(www\.[a-zA-Z0-9-]+\.[a-zA-Z]{2,})$/
+    const targetPass = reg.test(target)
     if (!targetPass) {
       globalThis.$toast.onOpen({
         type: "error",
@@ -254,15 +247,13 @@ export const useEditDomain = ({
       })
       return
     }
-    certRef.current = null
     setCurrentEditCert(null)
     setOpenEditDrawer(false)
-    await modifyCertTargetRequest({ id, target: `${protocol}${target}` })
+    await modifyCertTargetRequest({ id, target })
     getCertsList()
   }
 
   const onCancel = () => {
-    certRef.current = null
     setCurrentEditCert(null)
     setOpenEditDrawer(false)
   }
