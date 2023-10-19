@@ -37,7 +37,7 @@ export const tableCellConfig: {
   },
   {
     name: "Server",
-    alignPosition: "center",
+    alignPosition: "left",
   },
   {
     name: "Status",
