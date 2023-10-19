@@ -1,4 +1,3 @@
-
 import PlaylistAddSharpIcon from "@mui/icons-material/PlaylistAddSharp"
 import LoadingButton from "@mui/lab/LoadingButton"
 import Box from "@mui/material/Box/Box"
@@ -41,7 +40,7 @@ const Certificate: FC = () => {
   return (
     <Box minHeight="100%" display="flex" flexDirection="column">
       <Typography
-        mb={3}
+        mb={1.5}
         display="flex"
         justifyContent="flex-end"
         component="div"
@@ -54,7 +53,7 @@ const Certificate: FC = () => {
           loadingPosition="end"
           variant="contained"
         >
-          绑定域名
+          Add Domain
         </LoadingButton>
       </Typography>
       <DataTable

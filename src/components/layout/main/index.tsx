@@ -22,11 +22,6 @@ const tags: SideBarTag[] = [
     path: "/certificate",
     icon: <InboxIcon />,
   },
-  {
-    name: "Profile",
-    path: "/profile",
-    icon: <InboxIcon />,
-  },
 ]
 
 const MainLayout: FC = () => {
@@ -40,7 +35,7 @@ const MainLayout: FC = () => {
       </Drawer>
       <Box component="main" display="flex" flexDirection="column" flexGrow={1}>
         <DrawerHeaderContainer />
-        <Box flex={1} p={3} minHeight="100%">
+        <Box flex={1} p={1.5} minHeight="100%">
           <Outlet />
         </Box>
       </Box>

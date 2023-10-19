@@ -3,7 +3,6 @@ import RequireAuth from "@/components/requreAuth.tsx"
 import Certificate from "@/pages/certificate"
 import Login from "@/pages/login"
 import NotFound from "@/pages/not-found/NotFound"
-import Profile from "@/pages/profile"
 import { FC } from "react"
 import { Navigate, Route, Routes } from "react-router-dom"
 
@@ -16,7 +15,6 @@ const RenderRoutes: FC = () => {
       <Route element={<RequireAuth />}>
         <Route element={<MainLayout />}>
           <Route path="/certificate" element={<Certificate />} />
-          <Route path="/profile" element={<Profile />} />
         </Route>
       </Route>
 
