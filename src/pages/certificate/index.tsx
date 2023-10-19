@@ -70,11 +70,13 @@ const Certificate: FC = () => {
         onApplyCert={onApplyCert}
         onOpenEditDrawer={onOpenEditDrawer}
       />
-      <PaginationBar
-        currentPage={currentPage.current}
-        totalPage={totalPage}
-        onPageChange={onPageChange}
-      />
+      {totalPage && (
+        <PaginationBar
+          currentPage={currentPage.current}
+          totalPage={totalPage}
+          onPageChange={onPageChange}
+        />
+      )}
 
       <BindingDomainDialog
         open={openBindingDialog}
