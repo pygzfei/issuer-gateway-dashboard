@@ -70,7 +70,7 @@ const Certificate: FC = () => {
         onApplyCert={onApplyCert}
         onOpenEditDrawer={onOpenEditDrawer}
       />
-      {totalPage && (
+      {!!totalPage && (
         <PaginationBar
           currentPage={currentPage.current}
           totalPage={totalPage}
