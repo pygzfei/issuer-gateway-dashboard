@@ -1,9 +1,9 @@
-import { ChangeEvent, useEffect, useRef, useState } from "react"
+import { addDomainRequest, applyCertRequest, getCertsListRequest } from "@/api"
+import { Certs } from "@/entity/types"
 import { SelectChangeEvent } from "@mui/material/Select/SelectInput"
 import { SxProps, Theme } from "@mui/material/styles"
 import { TableCellProps } from "@mui/material/TableCell/TableCell"
-import { addDomainRequest, applyCertRequest, getCertsListRequest } from "@/api"
-import { Certs } from "@/entity/types"
+import { ChangeEvent, useEffect, useRef, useState } from "react"
 
 export interface OnDeleteParams {
   id: number
@@ -112,7 +112,7 @@ export const useAction = () => {
       })
     } else {
       msg &&
-        global.$toast.onOpen({
+        globalThis.$toast.onOpen({
           text: msg,
           type: "error",
         })
@@ -213,7 +213,7 @@ export const useBindDomain = ({
         setOpenBindingDialog(false)
       } else {
         msg &&
-          global.$toast.onOpen({
+          globalThis.$toast.onOpen({
             text: msg,
             type: "error",
           })

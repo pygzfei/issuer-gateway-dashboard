@@ -1,7 +1,7 @@
-import { FC, forwardRef, useImperativeHandle, useRef, useState } from "react"
-import { SxProps, Theme } from "@mui/material/styles"
 import Alert, { AlertColor } from "@mui/material/Alert/Alert"
 import Snackbar from "@mui/material/Snackbar/Snackbar"
+import { SxProps, Theme } from "@mui/material/styles"
+import { FC, forwardRef, useImperativeHandle, useRef, useState } from "react"
 
 export interface ToastOpenProps {
   text: string
@@ -88,7 +88,7 @@ const GlobalToast: FC = () => {
   return (
     <Toast
       ref={(toastRef: globalThis.ToastHandle) => {
-        global.$toast = toastRef
+        globalThis.$toast = toastRef
       }}
     />
   )

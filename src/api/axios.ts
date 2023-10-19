@@ -26,7 +26,7 @@ instance.interceptors.response.use(
       storage.remove(StorageKeys.TOKEN)
       history.replace("/login")
     }
-    global.$toast.onOpen({
+    globalThis.$toast.onOpen({
       text: "网络错误",
       type: "error",
     })

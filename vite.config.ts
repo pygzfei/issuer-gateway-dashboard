@@ -1,13 +1,11 @@
 import react from "@vitejs/plugin-react"
 import { resolve } from "path"
-import { dts } from "rollup-plugin-dts"
 import { defineConfig } from "vite"
 import checker from "vite-plugin-checker"
 
 // https://vitejs.dev/config/
 export default defineConfig({
   define: {
-    global: {},
   },
   plugins: [
     react({
@@ -23,7 +21,7 @@ export default defineConfig({
   ],
   build: {
     rollupOptions: {
-      plugins: [dts()],
+      // plugins: [dts()],
     },
   },
   resolve: {

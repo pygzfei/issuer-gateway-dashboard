@@ -1,8 +1,8 @@
+import { loginRequest } from "@/api"
+import { useAuth } from "@/hooks"
+import { StorageKeys } from "@/utils/storage"
 import { ChangeEvent, useRef, useState } from "react"
 import { useNavigate } from "react-router-dom"
-import { loginRequest } from "@/api"
-import { StorageKeys } from "@/utils/storage"
-import { useAuth } from "@/hooks"
 import { storage } from "../../utils/storage/index"
 
 export const useAction = () => {
@@ -37,7 +37,7 @@ export const useAction = () => {
       navigate("/")
     } else {
       msg &&
-        global.$toast.onOpen({
+        globalThis.$toast.onOpen({
           text: msg,
           type: "error",
         })
