@@ -128,3 +128,22 @@ export const renewCertRequest = async (
     return getResponseError(error)
   }
 }
+
+export const modifyCertTargetRequest = async ({
+  id,
+  target,
+}: {
+  id: number
+  target: string
+}): Promise<ApiResult<void>> => {
+  try {
+    const result = await axios.request({
+      url: "/api/cert/target",
+      method: "POST",
+      data: { id, target },
+    })
+    return tranResponse(result)
+  } catch (error) {
+    return getResponseError(error)
+  }
+}

@@ -11,8 +11,8 @@ import StyledTableCell from "./StyledTableCell"
 const OperationCell: FC<{
   cert: Certs
   onApplyCert: (id: number) => Promise<void>
-  onEditItem: (cert: Certs) => void
-}> = ({ cert, onApplyCert, onEditItem }) => {
+  onOpenEditDrawer: (cert: Certs) => void
+}> = ({ cert, onApplyCert, onOpenEditDrawer }) => {
   return (
     <StyledTableCell
       component="th"
@@ -62,7 +62,7 @@ const OperationCell: FC<{
       </LoadingButton>
       <LoadingButton
         size="small"
-        onClick={() => onEditItem(cert)}
+        onClick={() => onOpenEditDrawer(cert)}
         endIcon={<EditIcon />}
         loading={false}
         loadingPosition="end"

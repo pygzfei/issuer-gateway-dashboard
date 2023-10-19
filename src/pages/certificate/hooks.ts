@@ -1,5 +1,11 @@
-import { addDomainRequest, applyCertRequest, getCertsListRequest } from "@/api"
+import {
+  addDomainRequest,
+  applyCertRequest,
+  getCertsListRequest,
+  modifyCertTargetRequest,
+} from "@/api"
 import { Certs } from "@/entity/types"
+import { DOMAIN_REGEX, EMAIL_REGEX, TARGET_REGEX } from "@/utils/reg"
 import { SelectChangeEvent } from "@mui/material/Select/SelectInput"
 import { SxProps, Theme } from "@mui/material/styles"
 import { TableCellProps } from "@mui/material/TableCell/TableCell"
@@ -59,28 +65,9 @@ export const useAction = () => {
     total: 0,
   })
 
-  const [openEditDrawer, setOpenEditDrawer] = useState<boolean>(false)
-  const currentDeletedCert = useRef<Certs | null>(null)
-
   const totalPage = useMemo(() => {
     return Math.ceil(certsData.total / PAGE_SIZE)
   }, [certsData.total])
-
-  // TODO: 等待接口
-  const onEditItem = (cert: Certs) => {
-    currentDeletedCert.current = cert
-    setOpenEditDrawer(true)
-  }
-
-  const onConfirmDelete = () => {
-    currentDeletedCert.current = null
-    setOpenEditDrawer(false)
-  }
-
-  const onCancelDelete = () => {
-    currentDeletedCert.current = null
-    setOpenEditDrawer(false)
-  }
 
   const onPageChange = (_: ChangeEvent<unknown> | null, value: number) => {
     if (currentPage.current === value) return
@@ -125,12 +112,8 @@ export const useAction = () => {
     currentPage,
     certsData,
     finishInit,
-    openEditDrawer,
     totalPage,
     getCertsList,
-    onEditItem,
-    onConfirmDelete,
-    onCancelDelete,
     onPageChange,
     onApplyCert,
   }
@@ -178,12 +161,9 @@ export const useBindDomain = ({
   }
 
   const onSubmit = async () => {
-    const domainRegex = /^(?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}$/
-    const emailRegex = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/
-    const targetRegex = /^www\.[a-zA-Z0-9-]+\.[a-zA-Z]{2,}$/
-    const domainPass = domainRegex.test(bindingData.current.domain)
-    const targetPass = targetRegex.test(bindingData.current.target)
-    const emailPass = emailRegex.test(bindingData.current.email)
+    const domainPass = DOMAIN_REGEX.test(bindingData.current.domain)
+    const targetPass = TARGET_REGEX.test(bindingData.current.target)
+    const emailPass = EMAIL_REGEX.test(bindingData.current.email)
     setValidStatus({
       domainError: !domainPass,
       emailError: !emailPass,
@@ -228,5 +208,71 @@ export const useBindDomain = ({
     onChangeProtocol,
     onSubmit,
     onClose,
+  }
+}
+
+export const useEditDomain = ({
+  getCertsList,
+}: {
+  getCertsList: () => Promise<void>
+}) => {
+  const [currentEditCert, setCurrentEditCert] = useState<Certs | null>(null)
+  const [openEditDrawer, setOpenEditDrawer] = useState<boolean>(false)
+  const certRef = useRef<Certs | null>(null)
+
+  const onOpenEditDrawer = (cert: Certs) => {
+    certRef.current = cert
+    setCurrentEditCert({
+      ...cert,
+      target: cert.target
+        .replace(ProtocolType.http, "")
+        .replace(ProtocolType.https, ""),
+    })
+    setOpenEditDrawer(true)
+  }
+
+  const onChangeTarget = (e: ChangeEvent<HTMLInputElement>) => {
+    setCurrentEditCert((val) => {
+      if (val) {
+        return {
+          ...val,
+          target: e.target.value,
+        }
+      }
+      return null
+    })
+  }
+
+  const onSubmit = async ({ id, target }: { id?: number; target?: string }) => {
+    if (!id || !target) return
+    const protocol = `${new URL(certRef.current?.target ?? "")?.protocol}//`
+    const targetPass = TARGET_REGEX.test(target)
+    if (!targetPass) {
+      globalThis.$toast.onOpen({
+        type: "error",
+        text: 'Server invalid! "http://" or "https://" necessary',
+      })
+      return
+    }
+    certRef.current = null
+    setCurrentEditCert(null)
+    setOpenEditDrawer(false)
+    await modifyCertTargetRequest({ id, target: `${protocol}${target}` })
+    getCertsList()
+  }
+
+  const onCancel = () => {
+    certRef.current = null
+    setCurrentEditCert(null)
+    setOpenEditDrawer(false)
+  }
+
+  return {
+    currentEditCert,
+    openEditDrawer,
+    onOpenEditDrawer,
+    onSubmit,
+    onChangeTarget,
+    onCancel,
   }
 }

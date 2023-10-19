@@ -5,8 +5,9 @@ import Typography from "@mui/material/Typography/Typography"
 import { FC } from "react"
 import BindingDomainDialog from "./components/BindingDomainDialog"
 import DataTable from "./components/DataTable"
+import EditDrawer from "./components/EditDrawer"
 import PaginationBar from "./components/Pagination"
-import { useAction, useBindDomain } from "./hooks"
+import { useAction, useBindDomain, useEditDomain } from "./hooks"
 
 const Certificate: FC = () => {
   const {
@@ -15,7 +16,6 @@ const Certificate: FC = () => {
     currentPage,
     totalPage,
     getCertsList,
-    onEditItem,
     onPageChange,
     onApplyCert,
   } = useAction()
@@ -32,6 +32,17 @@ const Certificate: FC = () => {
     onSubmit,
     onClose,
   } = useBindDomain({ getCertsList })
+
+  const {
+    openEditDrawer,
+    currentEditCert,
+    onOpenEditDrawer,
+    onChangeTarget,
+    onCancel,
+    onSubmit: onSubmitEditDomain,
+  } = useEditDomain({
+    getCertsList,
+  })
 
   return (
     <Box display="flex" flexDirection="column" flex={1}>
@@ -57,7 +68,7 @@ const Certificate: FC = () => {
         certsList={certsData.certsList}
         total={certsData.total}
         onApplyCert={onApplyCert}
-        onEditItem={onEditItem}
+        onOpenEditDrawer={onOpenEditDrawer}
       />
       <PaginationBar
         currentPage={currentPage.current}
@@ -75,6 +86,14 @@ const Certificate: FC = () => {
         onConfirm={onSubmit}
         onChangeProtocol={onChangeProtocol}
         onClose={onClose}
+      />
+
+      <EditDrawer
+        cert={currentEditCert}
+        open={openEditDrawer}
+        onChangeTarget={onChangeTarget}
+        onSubmit={onSubmitEditDomain}
+        onClose={onCancel}
       />
     </Box>
   )
