@@ -104,7 +104,12 @@ export const uploadCertRequest = async ({
     const result = await axios.request({
       url: "/api/cert/upload",
       method: "POST",
-      data: { id, certificate, privateKey, issuerCertificate },
+      data: {
+        id,
+        certificate,
+        private_key: privateKey,
+        issuer_certificate: issuerCertificate,
+      },
     })
     return tranResponse(result)
   } catch (error) {
