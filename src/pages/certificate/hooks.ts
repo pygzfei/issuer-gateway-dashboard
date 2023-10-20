@@ -48,7 +48,7 @@ export const tableCellConfig: {
     alignPosition: "center",
   },
   {
-    name: "Expired On",
+    name: "Expired At",
     alignPosition: "center",
   },
   {

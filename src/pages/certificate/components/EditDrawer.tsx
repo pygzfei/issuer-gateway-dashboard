@@ -70,7 +70,7 @@ const EditDrawer: FC<EditDrawerProps> = ({
           />
           {!!cert?.expire && (
             <DrawerItem
-              name="Expired On:"
+              name="Expired At:"
               disabled
               value={formatDateTime(cert?.expire ?? 0 * 1000, "yyyy-MM-dd")}
             />
