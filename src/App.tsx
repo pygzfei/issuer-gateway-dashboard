@@ -1,4 +1,5 @@
 import { HashRouter } from "react-router-dom"
+import CustomThemeProvider from "./components/themeProvider"
 import GlobalToast from "./components/toast/index"
 import { AuthProvider } from "./context/authProvider"
 import RenderRoutes from "./router"
@@ -11,7 +12,9 @@ function App() {
       <GlobalToast />
       <HashRouter>
         <AuthProvider>
-          <RenderRoutes />
+          <CustomThemeProvider>
+            <RenderRoutes />
+          </CustomThemeProvider>
         </AuthProvider>
       </HashRouter>
     </>

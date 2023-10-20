@@ -2,6 +2,7 @@ import { Certs } from "@/entity/types"
 import { formatDateTime } from "@/utils/time"
 import CircleIcon from "@mui/icons-material/Circle"
 import Paper from "@mui/material/Paper/Paper"
+import { useTheme } from "@mui/material/styles"
 import Table from "@mui/material/Table/Table"
 import TableBody from "@mui/material/TableBody/TableBody"
 import TableContainer from "@mui/material/TableContainer/TableContainer"
@@ -17,6 +18,7 @@ import StyledTableRow from "./StyledTableRow"
 import TableSkeleton from "./TableSkeleton"
 
 const StatusSign: FC<{ expire: number }> = ({ expire }) => {
+  const theme = useTheme()
   const signInfo = useMemo(() => {
     const timestamp = expire * 1000
     const now = Date.now()
@@ -24,30 +26,44 @@ const StatusSign: FC<{ expire: number }> = ({ expire }) => {
     if (!timestamp) {
       return {
         message: "No certificate",
-        color: "rgb(189 189 189)",
+        color: theme.palette.text.disabled,
       }
     }
     if (timestamp < now) {
       return {
         message: "certificate expired",
-        color: "rgb(255 95 87)",
+        color: theme.palette.error.main,
       }
     }
     if (timestamp - now <= 10 * 24 * 60 * 60 * 1000) {
       return {
         message: `certificate will be expired in ${leftDay} day(s)`,
-        color: "rgb(254 188 47)",
+        color: theme.palette.warning.main,
       }
     }
     return {
       message: "Normal",
-      color: "rgb(41 200 64)",
+      color: theme.palette.success.main,
     }
-  }, [expire])
+  }, [
+    expire,
+    theme.palette.error.main,
+    theme.palette.success.main,
+    theme.palette.text.disabled,
+    theme.palette.warning.main,
+  ])
 
   return (
     <Tooltip title={signInfo.message} placement="top-start">
-      <CircleIcon sx={{ fontSize: "16px", color: signInfo.color }} />
+      <div
+        css={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <CircleIcon sx={{ fontSize: "16px", color: signInfo.color }} />
+      </div>
     </Tooltip>
   )
 }
