@@ -57,8 +57,16 @@ const DataTableBody: FC<{
   certsList: Certs[]
   total: number
   onApplyCert: (id: number) => Promise<void>
+  onRenewCert: (id: number) => Promise<void>
   onOpenEditDrawer: (cert: Certs) => void
-}> = ({ finishInit, certsList, total, onApplyCert, onOpenEditDrawer }) => {
+}> = ({
+  finishInit,
+  certsList,
+  total,
+  onApplyCert,
+  onRenewCert,
+  onOpenEditDrawer,
+}) => {
   if (!finishInit) {
     return <TableSkeleton />
   }
@@ -92,6 +100,7 @@ const DataTableBody: FC<{
             <OperationCell
               cert={cert}
               onApplyCert={onApplyCert}
+              onRenewCert={onRenewCert}
               onOpenEditDrawer={onOpenEditDrawer}
             />
           </StyledTableRow>
@@ -117,8 +126,16 @@ const DataTable: FC<{
   certsList: Certs[]
   total: number
   onApplyCert: (id: number) => Promise<void>
+  onRenewCert: (id: number) => Promise<void>
   onOpenEditDrawer: (cert: Certs) => void
-}> = ({ finishInit, certsList, total, onApplyCert, onOpenEditDrawer }) => {
+}> = ({
+  finishInit,
+  certsList,
+  total,
+  onApplyCert,
+  onRenewCert,
+  onOpenEditDrawer,
+}) => {
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 700 }}>
@@ -140,6 +157,7 @@ const DataTable: FC<{
           certsList={certsList}
           total={total}
           onApplyCert={onApplyCert}
+          onRenewCert={onRenewCert}
           onOpenEditDrawer={onOpenEditDrawer}
         />
       </Table>

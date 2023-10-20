@@ -18,6 +18,7 @@ const Certificate: FC = () => {
     getCertsList,
     onPageChange,
     onApplyCert,
+    onRenewCert,
   } = useAction()
 
   const {
@@ -68,6 +69,7 @@ const Certificate: FC = () => {
         certsList={certsData.certsList}
         total={certsData.total}
         onApplyCert={onApplyCert}
+        onRenewCert={onRenewCert}
         onOpenEditDrawer={onOpenEditDrawer}
       />
       {!!totalPage && (

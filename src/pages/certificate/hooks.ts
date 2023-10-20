@@ -3,6 +3,7 @@ import {
   applyCertRequest,
   getCertsListRequest,
   modifyCertTargetRequest,
+  renewCertRequest,
 } from "@/api"
 import { Certs } from "@/entity/types"
 import { DOMAIN_REGEX, EMAIL_REGEX, TARGET_REGEX } from "@/utils/reg"
@@ -103,6 +104,13 @@ export const useAction = () => {
     await applyCertRequest(id)
   }
 
+  const onRenewCert = async (id: number) => {
+    const { success } = await renewCertRequest(id)
+    if (success) {
+      getCertsList()
+    }
+  }
+
   const init = async () => {
     await getCertsList()
     setFinishInit(true)
@@ -120,6 +128,7 @@ export const useAction = () => {
     getCertsList,
     onPageChange,
     onApplyCert,
+    onRenewCert,
   }
 }
 

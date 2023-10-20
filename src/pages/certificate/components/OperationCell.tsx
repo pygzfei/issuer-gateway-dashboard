@@ -11,8 +11,9 @@ import StyledTableCell from "./StyledTableCell"
 const OperationCell: FC<{
   cert: Certs
   onApplyCert: (id: number) => Promise<void>
+  onRenewCert: (id: number) => Promise<void>
   onOpenEditDrawer: (cert: Certs) => void
-}> = ({ cert, onApplyCert, onOpenEditDrawer }) => {
+}> = ({ cert, onApplyCert, onRenewCert, onOpenEditDrawer }) => {
   return (
     <StyledTableCell
       component="th"
@@ -41,7 +42,7 @@ const OperationCell: FC<{
       {cert.expire > 0 && (
         <LoadingButton
           size="small"
-          onClick={() => {}}
+          onClick={() => onRenewCert(cert.id)}
           endIcon={<Refresh />}
           loading={false}
           loadingPosition="end"

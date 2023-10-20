@@ -78,7 +78,7 @@ export const applyCertRequest = async (
   try {
     const result = await axios.request({
       url: "/api/cert",
-      method: "POST",
+      method: "PUT",
       data: {
         id,
       },
@@ -113,14 +113,13 @@ export const uploadCertRequest = async ({
   }
 }
 
-// TODO: 待对接
 export const renewCertRequest = async (
   id: number
 ): Promise<ApiResult<void>> => {
   try {
     const result = await axios.request({
-      url: "/api/cert/upload",
-      method: "PUT",
+      url: "/api/cert",
+      method: "POST",
       data: { id },
     })
     return tranResponse(result)
