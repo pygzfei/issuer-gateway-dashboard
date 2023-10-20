@@ -1,7 +1,6 @@
 import { Certs } from "@/entity/types"
 import { formatDateTime } from "@/utils/time"
 import CircleIcon from "@mui/icons-material/Circle"
-import { SvgIconOwnProps } from "@mui/material"
 import Paper from "@mui/material/Paper/Paper"
 import Table from "@mui/material/Table/Table"
 import TableBody from "@mui/material/TableBody/TableBody"
@@ -18,40 +17,37 @@ import StyledTableRow from "./StyledTableRow"
 import TableSkeleton from "./TableSkeleton"
 
 const StatusSign: FC<{ expire: number }> = ({ expire }) => {
-  const signInfo: {
-    message: string
-    color: SvgIconOwnProps["color"]
-  } = useMemo(() => {
+  const signInfo = useMemo(() => {
     const timestamp = expire * 1000
     const now = Date.now()
-    const leftDay = Math.floor((timestamp - now) / (10 * 24 * 60 * 60 * 1000))
+    const leftDay = Math.ceil((timestamp - now) / (24 * 60 * 60 * 1000))
     if (!timestamp) {
       return {
         message: "No certificate",
-        color: "disabled",
+        color: "rgb(189 189 189)",
       }
     }
     if (timestamp < now) {
       return {
         message: "certificate expired",
-        color: "error",
+        color: "rgb(255 95 87)",
       }
     }
     if (timestamp - now <= 10 * 24 * 60 * 60 * 1000) {
       return {
-        message: `certificate will be expired in ${leftDay}`,
-        color: "warning",
+        message: `certificate will be expired in ${leftDay} day(s)`,
+        color: "rgb(254 188 47)",
       }
     }
     return {
       message: "Normal",
-      color: "success",
+      color: "rgb(41 200 64)",
     }
   }, [expire])
 
   return (
     <Tooltip title={signInfo.message} placement="top-start">
-      <CircleIcon color={signInfo.color} sx={{ fontSize: "16px" }} />
+      <CircleIcon sx={{ fontSize: "16px", color: signInfo.color }} />
     </Tooltip>
   )
 }
