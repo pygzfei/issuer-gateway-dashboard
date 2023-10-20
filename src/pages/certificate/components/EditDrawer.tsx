@@ -50,7 +50,7 @@ const EditDrawer: FC<EditDrawerProps> = ({
       <Drawer anchor="right" open={open} onClose={onClose}>
         <DrawerHeader />
         <Box
-          minWidth="350px"
+          minWidth="400px"
           height="100%"
           padding={theme.spacing(2)}
           display="flex"
@@ -66,13 +66,13 @@ const EditDrawer: FC<EditDrawerProps> = ({
           <DrawerItem
             name="Create Time:"
             disabled
-            value={formatDateTime(cert?.created_at ?? 0 * 1000, "yyyy-MM-dd")}
+            value={formatDateTime((cert?.created_at ?? 0) * 1000, "yyyy-MM-dd")}
           />
           {!!cert?.expire && (
             <DrawerItem
               name="Expired At:"
               disabled
-              value={formatDateTime(cert?.expire ?? 0 * 1000, "yyyy-MM-dd")}
+              value={formatDateTime((cert?.expire ?? 0) * 1000, "yyyy-MM-dd")}
             />
           )}
 
