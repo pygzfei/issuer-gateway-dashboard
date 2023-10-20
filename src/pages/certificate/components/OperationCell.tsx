@@ -1,4 +1,3 @@
-import VisuallyHiddenInput from "@/components/VisuallyHiddenInput"
 import { Certs } from "@/entity/types"
 import EditIcon from "@mui/icons-material/Edit"
 import FileUpload from "@mui/icons-material/FileUpload"
@@ -14,8 +13,15 @@ const OperationCell: FC<{
   cert: Certs
   onApplyCert: (id: number) => Promise<void>
   onRenewCert: (id: number) => Promise<void>
+  onOpenUploadDialog: (id: number) => void
   onOpenEditDrawer: (cert: Certs) => void
-}> = ({ cert, onApplyCert, onRenewCert, onOpenEditDrawer }) => {
+}> = ({
+  cert,
+  onApplyCert,
+  onRenewCert,
+  onOpenUploadDialog,
+  onOpenEditDrawer,
+}) => {
   const theme = useTheme()
   return (
     <StyledTableCell
@@ -59,14 +65,13 @@ const OperationCell: FC<{
         )}
         <LoadingButton
           size="small"
-          component="label"
+          onClick={() => onOpenUploadDialog(cert.id)}
           endIcon={<FileUpload />}
           loading={false}
           loadingPosition="end"
           variant="contained"
         >
           upload
-          <VisuallyHiddenInput type="file" />
         </LoadingButton>
         <LoadingButton
           size="small"

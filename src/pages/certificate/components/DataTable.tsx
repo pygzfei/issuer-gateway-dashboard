@@ -74,6 +74,7 @@ const DataTableBody: FC<{
   total: number
   onApplyCert: (id: number) => Promise<void>
   onRenewCert: (id: number) => Promise<void>
+  onOpenUploadDialog: (id: number) => void
   onOpenEditDrawer: (cert: Certs) => void
 }> = ({
   finishInit,
@@ -81,6 +82,7 @@ const DataTableBody: FC<{
   total,
   onApplyCert,
   onRenewCert,
+  onOpenUploadDialog,
   onOpenEditDrawer,
 }) => {
   if (!finishInit) {
@@ -117,6 +119,7 @@ const DataTableBody: FC<{
               cert={cert}
               onApplyCert={onApplyCert}
               onRenewCert={onRenewCert}
+              onOpenUploadDialog={onOpenUploadDialog}
               onOpenEditDrawer={onOpenEditDrawer}
             />
           </StyledTableRow>
@@ -143,6 +146,7 @@ const DataTable: FC<{
   total: number
   onApplyCert: (id: number) => Promise<void>
   onRenewCert: (id: number) => Promise<void>
+  onOpenUploadDialog: (id: number) => void
   onOpenEditDrawer: (cert: Certs) => void
 }> = ({
   finishInit,
@@ -150,6 +154,7 @@ const DataTable: FC<{
   total,
   onApplyCert,
   onRenewCert,
+  onOpenUploadDialog,
   onOpenEditDrawer,
 }) => {
   return (
@@ -174,6 +179,7 @@ const DataTable: FC<{
           total={total}
           onApplyCert={onApplyCert}
           onRenewCert={onRenewCert}
+          onOpenUploadDialog={onOpenUploadDialog}
           onOpenEditDrawer={onOpenEditDrawer}
         />
       </Table>

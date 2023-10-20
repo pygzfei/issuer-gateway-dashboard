@@ -98,7 +98,7 @@ export const uploadCertRequest = async ({
   id: number
   certificate: string
   privateKey: string
-  issuerCertificate: string
+  issuerCertificate?: string
 }): Promise<ApiResult<void>> => {
   try {
     const result = await axios.request({

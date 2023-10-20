@@ -7,6 +7,7 @@ import BindingDomainDialog from "./components/BindingDomainDialog"
 import DataTable from "./components/DataTable"
 import EditDrawer from "./components/EditDrawer"
 import PaginationBar from "./components/Pagination"
+import { UploadDialog } from "./components/UpdoadDialog"
 import { useAction, useBindDomain, useEditDomain } from "./hooks"
 
 const Certificate: FC = () => {
@@ -15,10 +16,14 @@ const Certificate: FC = () => {
     finishInit,
     currentPage,
     totalPage,
+    uploadCertificateState,
     getCertsList,
     onPageChange,
     onApplyCert,
     onRenewCert,
+    onOpenUploadDialog,
+    onCloseUploadDialog,
+    afterUpload,
   } = useAction()
 
   const {
@@ -70,6 +75,7 @@ const Certificate: FC = () => {
         total={certsData.total}
         onApplyCert={onApplyCert}
         onRenewCert={onRenewCert}
+        onOpenUploadDialog={onOpenUploadDialog}
         onOpenEditDrawer={onOpenEditDrawer}
       />
       {!!totalPage && (
@@ -90,6 +96,13 @@ const Certificate: FC = () => {
         onConfirm={onSubmit}
         onChangeProtocol={onChangeProtocol}
         onClose={onClose}
+      />
+
+      <UploadDialog
+        certId={uploadCertificateState.certId}
+        open={uploadCertificateState.open}
+        onClose={onCloseUploadDialog}
+        afterUploadCallback={afterUpload}
       />
 
       <EditDrawer

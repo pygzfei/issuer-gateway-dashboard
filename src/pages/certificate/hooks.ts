@@ -70,6 +70,14 @@ export const useAction = () => {
     total: 0,
   })
 
+  const [uploadCertificateState, setUploadCertificateState] = useState<{
+    open: boolean
+    certId: number
+  }>({
+    open: false,
+    certId: 0,
+  })
+
   const totalPage = useMemo(() => {
     return Math.ceil(certsData.total / PAGE_SIZE)
   }, [certsData.total])
@@ -125,6 +133,27 @@ export const useAction = () => {
     }
   }
 
+  const onOpenUploadDialog = (id: number) => {
+    setUploadCertificateState({
+      open: true,
+      certId: id,
+    })
+  }
+
+  const onCloseUploadDialog = () => {
+    setUploadCertificateState({
+      open: false,
+      certId: 0,
+    })
+  }
+
+  const afterUpload = (success: boolean) => {
+    if (success) {
+      getCertsList()
+    }
+    onCloseUploadDialog()
+  }
+
   const init = async () => {
     await getCertsList()
     setFinishInit(true)
@@ -139,10 +168,14 @@ export const useAction = () => {
     certsData,
     finishInit,
     totalPage,
+    uploadCertificateState,
     getCertsList,
     onPageChange,
     onApplyCert,
     onRenewCert,
+    onOpenUploadDialog,
+    onCloseUploadDialog,
+    afterUpload,
   }
 }
 
