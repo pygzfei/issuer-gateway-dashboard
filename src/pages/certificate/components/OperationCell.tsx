@@ -1,18 +1,20 @@
-import { FC } from "react"
-import LoadingButton from "@mui/lab/LoadingButton/LoadingButton"
-import PlaylistAddSharpIcon from "@mui/icons-material/PlaylistAddSharp"
-import FileUpload from "@mui/icons-material/FileUpload"
-import DeleteIcon from "@mui/icons-material/Delete"
-import Refresh from "@mui/icons-material/Refresh"
+import VisuallyHiddenInput from "@/components/VisuallyHiddenInput"
 import { Certs } from "@/entity/types"
+import EditIcon from "@mui/icons-material/Edit"
+import FileUpload from "@mui/icons-material/FileUpload"
+import PlaylistAddSharpIcon from "@mui/icons-material/PlaylistAddSharp"
+import Refresh from "@mui/icons-material/Refresh"
+import LoadingButton from "@mui/lab/LoadingButton/LoadingButton"
+import { FC } from "react"
+import { OPERATION_ROW_WIDTH } from "../hooks"
 import StyledTableCell from "./StyledTableCell"
-import { OnDeleteParams, OPERATION_ROW_WIDTH } from "../hooks"
 
 const OperationCell: FC<{
   cert: Certs
   onApplyCert: (id: number) => Promise<void>
-  onDeleteItem: (params: OnDeleteParams) => void
-}> = ({ cert, onApplyCert, onDeleteItem }) => {
+  onRenewCert: (id: number) => Promise<void>
+  onOpenEditDrawer: (cert: Certs) => void
+}> = ({ cert, onApplyCert, onRenewCert, onOpenEditDrawer }) => {
   return (
     <StyledTableCell
       component="th"
@@ -35,47 +37,41 @@ const OperationCell: FC<{
           loadingPosition="end"
           variant="contained"
         >
-          申请证书
+          apply
         </LoadingButton>
       )}
       {cert.expire > 0 && (
         <LoadingButton
           size="small"
-          onClick={() => {}}
+          onClick={() => onRenewCert(cert.id)}
           endIcon={<Refresh />}
           loading={false}
           loadingPosition="end"
           variant="contained"
         >
-          重新申请
+          renew
         </LoadingButton>
       )}
       <LoadingButton
         size="small"
-        onClick={() => {}}
+        component="label"
         endIcon={<FileUpload />}
         loading={false}
         loadingPosition="end"
         variant="contained"
       >
-        上传证书
+        upload
+        <VisuallyHiddenInput type="file" />
       </LoadingButton>
       <LoadingButton
-        color="error"
         size="small"
-        onClick={() =>
-          onDeleteItem({
-            id: cert.id,
-            title: "",
-            content: `确认删除 ${cert.domain}`,
-          })
-        }
-        endIcon={<DeleteIcon />}
+        onClick={() => onOpenEditDrawer(cert)}
+        endIcon={<EditIcon />}
         loading={false}
         loadingPosition="end"
         variant="contained"
       >
-        <p>删除</p>
+        edit
       </LoadingButton>
     </StyledTableCell>
   )

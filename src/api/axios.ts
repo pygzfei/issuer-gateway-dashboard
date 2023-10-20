@@ -27,7 +27,7 @@ instance.interceptors.response.use(
       history.replace("/login")
     }
     globalThis.$toast.onOpen({
-      text: "网络错误",
+      text: "network error",
       type: "error",
     })
     return Promise.reject(error)

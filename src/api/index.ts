@@ -1,6 +1,6 @@
+import { ApiResult, Certs } from "@/entity/types"
 import axios from "./axios"
 import { getResponseError, tranResponse } from "./lib"
-import { ApiResult, Certs } from "@/entity/types"
 
 export const loginRequest = async ({
   name,
@@ -30,7 +30,7 @@ export const getCertsListRequest = async ({
 }: {
   page: number
   size: number
-}): Promise<ApiResult<{ certs: Certs[]; total: number }>> => {
+}): Promise<ApiResult<{ certs?: Certs[]; total: number }>> => {
   try {
     const result = await axios.request({
       url: "/api/certs",
@@ -71,14 +71,13 @@ export const addDomainRequest = async ({
   }
 }
 
-// TODO: 待对接
 export const applyCertRequest = async (
   id: number
 ): Promise<ApiResult<void>> => {
   try {
     const result = await axios.request({
       url: "/api/cert",
-      method: "POST",
+      method: "PUT",
       data: {
         id,
       },
@@ -113,15 +112,33 @@ export const uploadCertRequest = async ({
   }
 }
 
-// TODO: 待对接
 export const renewCertRequest = async (
   id: number
 ): Promise<ApiResult<void>> => {
   try {
     const result = await axios.request({
-      url: "/api/cert/upload",
-      method: "PUT",
+      url: "/api/cert",
+      method: "POST",
       data: { id },
+    })
+    return tranResponse(result)
+  } catch (error) {
+    return getResponseError(error)
+  }
+}
+
+export const modifyCertTargetRequest = async ({
+  id,
+  target,
+}: {
+  id: number
+  target: string
+}): Promise<ApiResult<void>> => {
+  try {
+    const result = await axios.request({
+      url: "/api/cert/target",
+      method: "POST",
+      data: { id, target },
     })
     return tranResponse(result)
   } catch (error) {

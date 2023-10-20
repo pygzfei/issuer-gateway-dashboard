@@ -1,14 +1,13 @@
-import { FC, memo } from "react"
-import { styled } from "@mui/material/styles"
-import { useLocation, useNavigate } from "react-router-dom"
+import { singleLineEllipsis } from "@/styles/base"
 import List from "@mui/material/List"
 import ListItem from "@mui/material/ListItem"
 import ListItemButton from "@mui/material/ListItemButton"
 import ListItemIcon from "@mui/material/ListItemIcon"
 import ListItemText from "@mui/material/ListItemText"
+import { styled, useTheme } from "@mui/material/styles"
 import { typographyClasses } from "@mui/material/Typography"
-import { useTheme } from "@mui/material/styles"
-import { singleLineEllipsis } from "@/styles/base"
+import { FC, memo } from "react"
+import { useLocation, useNavigate } from "react-router-dom"
 import { SideBarTag } from ".."
 
 const StyledListItemText = styled(ListItemText)(() => ({
@@ -21,7 +20,10 @@ const SideBar: FC<{
   const location = useLocation()
   const navigate = useNavigate()
   const theme = useTheme()
-  const onSelect = (path: string) => navigate(path)
+  const onSelect = (path: string) => {
+    if (path === location.pathname) return
+    navigate(path)
+  }
 
   return (
     <List>

@@ -1,16 +1,16 @@
-import { FC, memo, useState, MouseEvent } from "react"
-import { useNavigate } from "react-router-dom"
-import MuiAppBar, { AppBarProps } from "@mui/material/AppBar"
-import Toolbar from "@mui/material/Toolbar"
-import AccountCircleIcon from "@mui/icons-material/AccountCircle"
-import IconButton from "@mui/material/IconButton"
-import Typography from "@mui/material/Typography"
-import Avatar from "@mui/material/Avatar/Avatar"
-import MenuItem from "@mui/material/MenuItem/MenuItem"
-import Menu from "@mui/material/Menu/Menu"
-import { styled, useTheme } from "@mui/material/styles"
-import { storage, StorageKeys } from "@/utils/storage"
 import { useAuth } from "@/hooks"
+import { storage, StorageKeys } from "@/utils/storage"
+import AccountCircleIcon from "@mui/icons-material/AccountCircle"
+import MuiAppBar, { AppBarProps } from "@mui/material/AppBar"
+import Avatar from "@mui/material/Avatar/Avatar"
+import IconButton from "@mui/material/IconButton"
+import Menu from "@mui/material/Menu/Menu"
+import MenuItem from "@mui/material/MenuItem/MenuItem"
+import { styled, useTheme } from "@mui/material/styles"
+import Toolbar from "@mui/material/Toolbar"
+import Typography from "@mui/material/Typography"
+import { FC, memo, MouseEvent, useState } from "react"
+import { useNavigate } from "react-router-dom"
 
 const TopBarContainer = styled(MuiAppBar)<AppBarProps>(({ theme }) => ({
   zIndex: theme.zIndex.drawer + 1,
@@ -64,12 +64,12 @@ const UserAvatar: FC = () => {
   )
 }
 
-const TopBar: FC<{}> = memo(() => {
+const TopBar: FC = memo(() => {
   return (
     <TopBarContainer position="fixed">
       <Toolbar>
         <Typography variant="h6" noWrap component="p" flex={1}>
-          Issuer Gateway Admin Protal
+          Issuer Gateway Dashboard
         </Typography>
         <UserAvatar />
       </Toolbar>

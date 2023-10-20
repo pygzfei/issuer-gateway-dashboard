@@ -1,4 +1,3 @@
-
 import PlaylistAddSharpIcon from "@mui/icons-material/PlaylistAddSharp"
 import LoadingButton from "@mui/lab/LoadingButton"
 import Box from "@mui/material/Box/Box"
@@ -6,23 +5,20 @@ import Typography from "@mui/material/Typography/Typography"
 import { FC } from "react"
 import BindingDomainDialog from "./components/BindingDomainDialog"
 import DataTable from "./components/DataTable"
-import DeleteDialog from "./components/DeleteDialog"
-import Pagination from "./components/Pagination"
-import { useAction, useBindDomain } from "./hooks"
+import EditDrawer from "./components/EditDrawer"
+import PaginationBar from "./components/Pagination"
+import { useAction, useBindDomain, useEditDomain } from "./hooks"
 
 const Certificate: FC = () => {
   const {
     certsData,
     finishInit,
     currentPage,
-    openDeleteDialog,
-    deleteDialogData,
+    totalPage,
     getCertsList,
-    onDeleteItem,
-    onConfirmDelete,
-    onCancelDelete,
     onPageChange,
     onApplyCert,
+    onRenewCert,
   } = useAction()
 
   const {
@@ -38,10 +34,21 @@ const Certificate: FC = () => {
     onClose,
   } = useBindDomain({ getCertsList })
 
+  const {
+    openEditDrawer,
+    currentEditCert,
+    onOpenEditDrawer,
+    onChangeTarget,
+    onCancel,
+    onSubmit: onSubmitEditDomain,
+  } = useEditDomain({
+    getCertsList,
+  })
+
   return (
-    <Box minHeight="100%" display="flex" flexDirection="column">
+    <Box display="flex" flexDirection="column" flex={1}>
       <Typography
-        mb={3}
+        mb={1.5}
         display="flex"
         justifyContent="flex-end"
         component="div"
@@ -54,7 +61,7 @@ const Certificate: FC = () => {
           loadingPosition="end"
           variant="contained"
         >
-          绑定域名
+          Add Domain
         </LoadingButton>
       </Typography>
       <DataTable
@@ -62,13 +69,16 @@ const Certificate: FC = () => {
         certsList={certsData.certsList}
         total={certsData.total}
         onApplyCert={onApplyCert}
-        onDeleteItem={onDeleteItem}
+        onRenewCert={onRenewCert}
+        onOpenEditDrawer={onOpenEditDrawer}
       />
-      <Pagination
-        page={currentPage.current}
-        total={certsData.total}
-        onPageChange={onPageChange}
-      />
+      {!!totalPage && (
+        <PaginationBar
+          currentPage={currentPage.current}
+          totalPage={totalPage}
+          onPageChange={onPageChange}
+        />
+      )}
 
       <BindingDomainDialog
         open={openBindingDialog}
@@ -81,12 +91,13 @@ const Certificate: FC = () => {
         onChangeProtocol={onChangeProtocol}
         onClose={onClose}
       />
-      <DeleteDialog
-        open={openDeleteDialog}
-        title={deleteDialogData.current.title}
-        content={deleteDialogData.current.content}
-        onConfirm={onConfirmDelete}
-        onCancel={onCancelDelete}
+
+      <EditDrawer
+        cert={currentEditCert}
+        open={openEditDrawer}
+        onChangeTarget={onChangeTarget}
+        onSubmit={onSubmitEditDomain}
+        onClose={onCancel}
       />
     </Box>
   )

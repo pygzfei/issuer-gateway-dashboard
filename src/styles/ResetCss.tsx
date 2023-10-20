@@ -1,5 +1,5 @@
+import { css, Global } from "@emotion/react"
 import { FC } from "react"
-import { Global, css } from "@emotion/react"
 import normalizeCss from "./normalize"
 
 export const ResetCss: FC = () => {
@@ -13,7 +13,8 @@ export const ResetCss: FC = () => {
           box-sizing: border-box;
         }
         html,
-        body {
+        body,
+        #root {
           min-height: 100vh;
           min-width: 1300px;
         }

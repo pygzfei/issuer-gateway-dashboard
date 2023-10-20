@@ -1,17 +1,18 @@
-import { ChangeEvent, FC } from "react"
+import Button from "@mui/material/Button/Button"
 import Dialog from "@mui/material/Dialog/Dialog"
+import DialogActions from "@mui/material/DialogActions/DialogActions"
 import DialogContent from "@mui/material/DialogContent/DialogContent"
 import FormControl from "@mui/material/FormControl/FormControl"
 import FormHelperText from "@mui/material/FormHelperText/FormHelperText"
+import Grid from "@mui/material/Grid/Grid"
+import MenuItem from "@mui/material/MenuItem/MenuItem"
+import Select, { SelectChangeEvent } from "@mui/material/Select/Select"
 import Stack from "@mui/material/Stack/Stack"
 import TextField from "@mui/material/TextField/TextField"
+import Typography from "@mui/material/Typography/Typography"
+import { ChangeEvent, FC } from "react"
 import { ProtocolType, ValidStatus } from "../hooks"
 import * as styles from "../styles"
-import DialogActions from "@mui/material/DialogActions/DialogActions"
-import Button from "@mui/material/Button/Button"
-import Grid from "@mui/material/Grid/Grid"
-import Select, { SelectChangeEvent } from "@mui/material/Select/Select"
-import MenuItem from "@mui/material/MenuItem/MenuItem"
 
 const BindingDomainDialog: FC<{
   open: boolean
@@ -39,6 +40,7 @@ const BindingDomainDialog: FC<{
       <DialogContent>
         <FormControl fullWidth>
           <Stack spacing={2} component="form">
+            <Typography component="p">Add Domain:</Typography>
             <TextField
               label="Domain"
               variant="outlined"
@@ -48,7 +50,7 @@ const BindingDomainDialog: FC<{
             />
             {validStatus.domainError && (
               <FormHelperText style={styles.helpTextStyles} error>
-                *请输入正确的域名
+                *Domain error
               </FormHelperText>
             )}
 
@@ -62,7 +64,7 @@ const BindingDomainDialog: FC<{
 
             {validStatus.emailError && (
               <FormHelperText style={styles.helpTextStyles} error>
-                *请输入正确的邮箱
+                *Email error
               </FormHelperText>
             )}
             <Grid container display={"flex"} gap={2} flexWrap="nowrap">
@@ -85,15 +87,15 @@ const BindingDomainDialog: FC<{
 
             {validStatus.targetError && (
               <FormHelperText style={styles.helpTextStyles} error>
-                *请输入正确的target
+                *Target error
               </FormHelperText>
             )}
           </Stack>
         </FormControl>
       </DialogContent>
       <DialogActions>
-        <Button onClick={onConfirm}>确认</Button>
-        <Button onClick={onClose}>取消</Button>
+        <Button onClick={onConfirm}>Confirm</Button>
+        <Button onClick={onClose}>Cancel</Button>
       </DialogActions>
     </Dialog>
   )

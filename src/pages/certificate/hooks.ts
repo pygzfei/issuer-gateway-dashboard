@@ -1,15 +1,16 @@
-import { addDomainRequest, applyCertRequest, getCertsListRequest } from "@/api"
+import {
+  addDomainRequest,
+  applyCertRequest,
+  getCertsListRequest,
+  modifyCertTargetRequest,
+  renewCertRequest,
+} from "@/api"
 import { Certs } from "@/entity/types"
+import { DOMAIN_REGEX, EMAIL_REGEX, TARGET_REGEX } from "@/utils/reg"
 import { SelectChangeEvent } from "@mui/material/Select/SelectInput"
 import { SxProps, Theme } from "@mui/material/styles"
 import { TableCellProps } from "@mui/material/TableCell/TableCell"
-import { ChangeEvent, useEffect, useRef, useState } from "react"
-
-export interface OnDeleteParams {
-  id: number
-  title: string
-  content: string
-}
+import { ChangeEvent, useEffect, useMemo, useRef, useState } from "react"
 
 export interface ValidStatus {
   domainError: boolean
@@ -37,7 +38,7 @@ export const tableCellConfig: {
   },
   {
     name: "Server",
-    alignPosition: "center",
+    alignPosition: "left",
   },
   {
     name: "Status",
@@ -45,6 +46,10 @@ export const tableCellConfig: {
   },
   {
     name: "Create Time",
+    alignPosition: "center",
+  },
+  {
+    name: "Expired At",
     alignPosition: "center",
   },
   {
@@ -65,38 +70,13 @@ export const useAction = () => {
     total: 0,
   })
 
-  const [openDeleteDialog, setOpenDeleteDialog] = useState<boolean>(false)
-  const deleteDialogData = useRef<{
-    id: number
-    title: string
-    content: string
-  }>({
-    id: 0,
-    title: "",
-    content: "",
-  })
-
-  // TODO: 等待接口
-  const onDeleteItem = (params: OnDeleteParams) => {
-    deleteDialogData.current = {
-      id: params.id,
-      title: params.title,
-      content: params.content,
-    }
-    setOpenDeleteDialog(true)
-  }
-
-  const onConfirmDelete = () => {
-    setOpenDeleteDialog(false)
-  }
-
-  const onCancelDelete = () => {
-    setOpenDeleteDialog(false)
-  }
+  const totalPage = useMemo(() => {
+    return Math.ceil(certsData.total / PAGE_SIZE)
+  }, [certsData.total])
 
   const onPageChange = (_: ChangeEvent<unknown> | null, value: number) => {
-    // <TablePagination /> page第一页下标是0
-    currentPage.current = value + 1
+    if (currentPage.current === value) return
+    currentPage.current = value
     getCertsList()
   }
 
@@ -107,7 +87,7 @@ export const useAction = () => {
     })
     if (success && data) {
       setCertsData({
-        certsList: data?.certs,
+        certsList: data?.certs ?? [],
         total: data?.total,
       })
     } else {
@@ -119,10 +99,30 @@ export const useAction = () => {
     }
   }
 
-  // TODO: 待对接
   const onApplyCert = async (id: number) => {
-    const res = await applyCertRequest(id)
-    console.log({ res })
+    const { success, msg } = await applyCertRequest(id)
+    if (success) {
+      getCertsList()
+    } else {
+      msg &&
+        globalThis.$toast.onOpen({
+          text: msg,
+          type: "error",
+        })
+    }
+  }
+
+  const onRenewCert = async (id: number) => {
+    const { success, msg } = await renewCertRequest(id)
+    if (success) {
+      getCertsList()
+    } else {
+      msg &&
+        globalThis.$toast.onOpen({
+          text: msg,
+          type: "error",
+        })
+    }
   }
 
   const init = async () => {
@@ -138,14 +138,11 @@ export const useAction = () => {
     currentPage,
     certsData,
     finishInit,
-    openDeleteDialog,
-    deleteDialogData,
+    totalPage,
     getCertsList,
-    onDeleteItem,
-    onConfirmDelete,
-    onCancelDelete,
     onPageChange,
     onApplyCert,
+    onRenewCert,
   }
 }
 
@@ -191,12 +188,9 @@ export const useBindDomain = ({
   }
 
   const onSubmit = async () => {
-    const domainRegex = /^(?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}$/
-    const emailRegex = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/
-    const targetRegex = /^www\.[a-zA-Z0-9-]+\.[a-zA-Z]{2,}$/
-    const domainPass = domainRegex.test(bindingData.current.domain)
-    const targetPass = targetRegex.test(bindingData.current.target)
-    const emailPass = emailRegex.test(bindingData.current.email)
+    const domainPass = DOMAIN_REGEX.test(bindingData.current.domain)
+    const targetPass = TARGET_REGEX.test(bindingData.current.target)
+    const emailPass = EMAIL_REGEX.test(bindingData.current.email)
     setValidStatus({
       domainError: !domainPass,
       emailError: !emailPass,
@@ -241,5 +235,62 @@ export const useBindDomain = ({
     onChangeProtocol,
     onSubmit,
     onClose,
+  }
+}
+
+export const useEditDomain = ({
+  getCertsList,
+}: {
+  getCertsList: () => Promise<void>
+}) => {
+  const [currentEditCert, setCurrentEditCert] = useState<Certs | null>(null)
+  const [openEditDrawer, setOpenEditDrawer] = useState<boolean>(false)
+
+  const onOpenEditDrawer = (cert: Certs) => {
+    setCurrentEditCert(cert)
+    setOpenEditDrawer(true)
+  }
+
+  const onChangeTarget = (e: ChangeEvent<HTMLInputElement>) => {
+    setCurrentEditCert((val) => {
+      if (val) {
+        return {
+          ...val,
+          target: e.target.value,
+        }
+      }
+      return null
+    })
+  }
+
+  const onSubmit = async ({ id, target }: { id?: number; target?: string }) => {
+    if (!id || !target) return
+    const reg = /^(https?:\/\/)(www\.[a-zA-Z0-9-]+\.[a-zA-Z]{2,})$/
+    const targetPass = reg.test(target)
+    if (!targetPass) {
+      globalThis.$toast.onOpen({
+        type: "error",
+        text: 'Server invalid! "http://" or "https://" necessary',
+      })
+      return
+    }
+    setCurrentEditCert(null)
+    setOpenEditDrawer(false)
+    await modifyCertTargetRequest({ id, target })
+    getCertsList()
+  }
+
+  const onCancel = () => {
+    setCurrentEditCert(null)
+    setOpenEditDrawer(false)
+  }
+
+  return {
+    currentEditCert,
+    openEditDrawer,
+    onOpenEditDrawer,
+    onSubmit,
+    onChangeTarget,
+    onCancel,
   }
 }

@@ -5,7 +5,7 @@ import { ChangeEvent, useRef, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { storage } from "../../utils/storage/index"
 
-export const useAction = () => {
+export const useLogIn = () => {
   const navigate = useNavigate()
   const { onSetAuth } = useAuth()
   const [showHelpText, setShowHelpText] = useState<boolean>(false)
@@ -45,4 +45,31 @@ export const useAction = () => {
   }
 
   return { showHelpText, onLogin, onChangeAccount, onChangePassword }
+}
+
+export const useLoginWithSecret = () => {
+  const { onSetAuth } = useAuth()
+  const navigate = useNavigate()
+  const [showHelpText, setShowHelpText] = useState<boolean>(false)
+  const secret = useRef<string>("")
+
+  const onChangeSecret = (e: ChangeEvent<HTMLInputElement>) => {
+    secret.current = e.target.value
+  }
+
+  const onLogin = async () => {
+    if (!secret.current) {
+      setShowHelpText(true)
+      return
+    }
+    storage.set(StorageKeys.TOKEN, secret.current)
+    onSetAuth(true)
+    navigate("/")
+  }
+
+  return {
+    showHelpText,
+    onChangeSecret,
+    onLogin,
+  }
 }
