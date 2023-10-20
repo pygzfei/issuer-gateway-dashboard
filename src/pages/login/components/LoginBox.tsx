@@ -15,7 +15,7 @@ export const LoginBox: FC = () => {
     <>
       <Stack spacing={2} sx={loginBoxStyles}>
         <Grid item component="p" textAlign="center">
-          Sign In
+          Welcome
         </Grid>
         <FormControl sx={{ mt: 10 }}>
           <Stack spacing={2} component="form">

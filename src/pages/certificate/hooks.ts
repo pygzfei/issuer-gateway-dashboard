@@ -48,6 +48,10 @@ export const tableCellConfig: {
     alignPosition: "center",
   },
   {
+    name: "Expired On",
+    alignPosition: "center",
+  },
+  {
     name: "Operation",
     alignPosition: "center",
     styles: { width: OPERATION_ROW_WIDTH },

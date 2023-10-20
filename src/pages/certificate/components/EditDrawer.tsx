@@ -68,6 +68,13 @@ const EditDrawer: FC<EditDrawerProps> = ({
             disabled
             value={formatDateTime(cert?.created_at ?? 0 * 1000, "yyyy-MM-dd")}
           />
+          {!!cert?.expire && (
+            <DrawerItem
+              name="Expired On:"
+              disabled
+              value={formatDateTime(cert?.expire ?? 0 * 1000, "yyyy-MM-dd")}
+            />
+          )}
 
           <LoadingButton
             size="small"

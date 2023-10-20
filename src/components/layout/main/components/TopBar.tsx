@@ -69,7 +69,7 @@ const TopBar: FC = memo(() => {
     <TopBarContainer position="fixed">
       <Toolbar>
         <Typography variant="h6" noWrap component="p" flex={1}>
-          Issuer Gateway Admin Protal
+          Issuer Gateway Dashboard
         </Typography>
         <UserAvatar />
       </Toolbar>

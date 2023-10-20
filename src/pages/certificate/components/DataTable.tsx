@@ -1,6 +1,6 @@
 import { Certs } from "@/entity/types"
 import { formatDateTime } from "@/utils/time"
-import AcUnitIcon from "@mui/icons-material/AcUnit"
+import CircleIcon from "@mui/icons-material/Circle"
 import { SvgIconOwnProps } from "@mui/material"
 import Paper from "@mui/material/Paper/Paper"
 import Table from "@mui/material/Table/Table"
@@ -51,7 +51,7 @@ const StatusSign: FC<{ expire: number }> = ({ expire }) => {
 
   return (
     <Tooltip title={signInfo.message} placement="top-start">
-      <AcUnitIcon color={signInfo.color} />
+      <CircleIcon color={signInfo.color} sx={{ fontSize: "16px" }} />
     </Tooltip>
   )
 }
@@ -88,6 +88,10 @@ const DataTableBody: FC<{
             </StyledTableCell>
             <StyledTableCell component="th" scope="row" align="center">
               {`${formatDateTime(cert.created_at * 1000, "yyyy-MM-dd")}`}
+            </StyledTableCell>
+            <StyledTableCell component="th" scope="row" align="center">
+              {!!cert.expire &&
+                `${formatDateTime(cert.expire * 1000, "yyyy-MM-dd")}`}
             </StyledTableCell>
             <OperationCell
               cert={cert}
