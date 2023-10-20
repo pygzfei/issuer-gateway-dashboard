@@ -99,15 +99,29 @@ export const useAction = () => {
     }
   }
 
-  // TODO: 待对接
   const onApplyCert = async (id: number) => {
-    await applyCertRequest(id)
+    const { success, msg } = await applyCertRequest(id)
+    if (success) {
+      getCertsList()
+    } else {
+      msg &&
+        globalThis.$toast.onOpen({
+          text: msg,
+          type: "error",
+        })
+    }
   }
 
   const onRenewCert = async (id: number) => {
-    const { success } = await renewCertRequest(id)
+    const { success, msg } = await renewCertRequest(id)
     if (success) {
       getCertsList()
+    } else {
+      msg &&
+        globalThis.$toast.onOpen({
+          text: msg,
+          type: "error",
+        })
     }
   }
 

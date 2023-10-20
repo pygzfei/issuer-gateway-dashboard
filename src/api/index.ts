@@ -71,7 +71,6 @@ export const addDomainRequest = async ({
   }
 }
 
-// TODO: 待对接
 export const applyCertRequest = async (
   id: number
 ): Promise<ApiResult<void>> => {

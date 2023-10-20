@@ -1,3 +1,4 @@
+import VisuallyHiddenInput from "@/components/VisuallyHiddenInput"
 import { Certs } from "@/entity/types"
 import EditIcon from "@mui/icons-material/Edit"
 import FileUpload from "@mui/icons-material/FileUpload"
@@ -53,13 +54,14 @@ const OperationCell: FC<{
       )}
       <LoadingButton
         size="small"
-        onClick={() => {}}
+        component="label"
         endIcon={<FileUpload />}
         loading={false}
         loadingPosition="end"
         variant="contained"
       >
         upload
+        <VisuallyHiddenInput type="file" />
       </LoadingButton>
       <LoadingButton
         size="small"
