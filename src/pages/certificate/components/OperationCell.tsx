@@ -68,7 +68,7 @@ const OperationCell: FC<{
         loadingPosition="end"
         variant="contained"
       >
-        <p>edit</p>
+        edit
       </LoadingButton>
     </StyledTableCell>
   )
