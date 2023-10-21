@@ -1,9 +1,9 @@
-import { CSSProperties } from "react"
+import { ellipsis } from "@/styles/base"
 import { CSSObject } from "@emotion/react"
-import { singleLineEllipsis } from "@/styles/base"
+import { CSSProperties } from "react"
 
 export const domainCell: CSSObject = {
-  ...singleLineEllipsis,
+  ...ellipsis(),
   width: "fit-content",
   maxWidth: "100%",
 }

@@ -1,4 +1,4 @@
-import { singleLineEllipsis } from "@/styles/base"
+import { ellipsis } from "@/styles/base"
 import List from "@mui/material/List"
 import ListItem from "@mui/material/ListItem"
 import ListItemButton from "@mui/material/ListItemButton"
@@ -11,7 +11,7 @@ import { useLocation, useNavigate } from "react-router-dom"
 import { SideBarTag } from ".."
 
 const StyledListItemText = styled(ListItemText)(() => ({
-  [`.${typographyClasses.root}`]: { ...singleLineEllipsis },
+  [`.${typographyClasses.root}`]: { ...ellipsis(), ...{ display: "block" } },
 }))
 
 const SideBar: FC<{

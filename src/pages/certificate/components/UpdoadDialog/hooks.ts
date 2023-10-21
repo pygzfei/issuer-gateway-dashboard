@@ -80,6 +80,16 @@ export const useAction = ({
     }
   }
 
+  const clearIssuerCertificate = () => {
+    setUploadData((v) => ({
+      ...v,
+      issuerCertificate: {
+        name: "",
+        value: "",
+      },
+    }))
+  }
+
   const onSubmit = async () => {
     if (!uploadData.certificate.value || !uploadData.privateKey.value) {
       globalThis.$toast.onOpen({
@@ -107,7 +117,7 @@ export const useAction = ({
   }
 
   useEffect(() => {
-    if (!open) {
+    if (open) {
       setUploadData({
         certificate: {
           name: "",
@@ -128,6 +138,7 @@ export const useAction = ({
   return {
     uploadData,
     onChangeUploadData,
+    clearIssuerCertificate,
     onSubmit,
   }
 }
