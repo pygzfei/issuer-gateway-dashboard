@@ -1,5 +1,5 @@
 import { uploadCertRequest } from "@/api"
-import { ChangeEvent, useEffect, useState } from "react"
+import { ChangeEvent, useEffect, useRef, useState } from "react"
 
 interface UploadData {
   certificate: {
@@ -45,6 +45,7 @@ export const useAction = ({
       value: "",
     },
   })
+  const issuerCertificateInputRef = useRef<HTMLInputElement>(null)
 
   const onChangeUploadData = (
     e: ChangeEvent<HTMLInputElement>,
@@ -72,15 +73,13 @@ export const useAction = ({
         })
       }
       reader.readAsText(selectedFile)
-    } else {
-      globalThis.$toast.onOpen({
-        text: "Failed",
-        type: "error",
-      })
     }
   }
 
   const clearIssuerCertificate = () => {
+    if (issuerCertificateInputRef.current?.value) {
+      issuerCertificateInputRef.current.value = ""
+    }
     setUploadData((v) => ({
       ...v,
       issuerCertificate: {
@@ -137,6 +136,7 @@ export const useAction = ({
 
   return {
     uploadData,
+    issuerCertificateInputRef,
     onChangeUploadData,
     clearIssuerCertificate,
     onSubmit,

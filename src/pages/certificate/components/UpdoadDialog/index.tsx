@@ -11,7 +11,7 @@ import IconButton from "@mui/material/IconButton/IconButton"
 import Stack from "@mui/material/Stack/Stack"
 import useTheme from "@mui/material/styles/useTheme"
 import Typography from "@mui/material/Typography/Typography"
-import { FC } from "react"
+import { ChangeEvent, FC, RefObject } from "react"
 import { UploadCertificateDataType, useAction } from "./hooks"
 
 interface UploadDialogProps {
@@ -21,129 +21,130 @@ interface UploadDialogProps {
   afterUploadCallback: (success: boolean) => void
 }
 
+interface UploadRowProps {
+  fileName: string
+  defaultFileName: string
+  showClearButton: boolean
+  inputRef?: RefObject<HTMLInputElement>
+  onChangeUploadData: (
+    e: ChangeEvent<HTMLInputElement>,
+    type: UploadCertificateDataType
+  ) => void
+  clearCallback?: () => void
+}
+
+const UploadRow: FC<UploadRowProps> = ({
+  fileName,
+  defaultFileName,
+  showClearButton,
+  inputRef,
+  onChangeUploadData,
+  clearCallback,
+}) => {
+  const theme = useTheme()
+  return (
+    <section
+      css={{
+        display: "flex",
+        alignItems: "center",
+      }}
+    >
+      <Button variant="outlined" component="label" size="small">
+        <CloudUploadIcon fontSize="small" />
+        <VisuallyHiddenInput
+          ref={inputRef}
+          type="file"
+          onChange={(e) =>
+            onChangeUploadData(e, UploadCertificateDataType.issuerCertificate)
+          }
+        />
+      </Button>
+      <Typography
+        component="p"
+        color={theme.palette.text.disabled}
+        css={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          marginLeft: theme.spacing(2),
+          ...ellipsis(),
+        }}
+      >
+        {fileName || defaultFileName}
+      </Typography>
+      {showClearButton && (
+        <IconButton
+          size="small"
+          sx={{ color: theme.palette.text.disabled }}
+          onClick={clearCallback}
+        >
+          <CancelRoundedIcon fontSize="small" />
+        </IconButton>
+      )}
+    </section>
+  )
+}
+
 export const UploadDialog: FC<UploadDialogProps> = ({
   open,
   certId,
   onClose,
   afterUploadCallback,
 }) => {
-  const theme = useTheme()
-  const { uploadData, onChangeUploadData, clearIssuerCertificate, onSubmit } =
-    useAction({
-      open,
-      certId,
-      afterUploadCallback,
-    })
+  const {
+    uploadData,
+    issuerCertificateInputRef,
+    onChangeUploadData,
+    clearIssuerCertificate,
+    onSubmit,
+  } = useAction({
+    open,
+    certId,
+    afterUploadCallback,
+  })
   return (
     <Dialog open={open} scroll={"paper"} maxWidth="sm" fullWidth>
       <DialogContent>
         <FormControl fullWidth>
           <Stack spacing={2} component="form">
             <Typography component="p">Upload Certificate:</Typography>
-            <section
-              css={{
-                display: "flex",
-                alignItems: "center",
-              }}
-            >
-              <Button variant="outlined" component="label" size="small">
-                <CloudUploadIcon fontSize="small" />
-                <VisuallyHiddenInput
-                  type="file"
-                  onChange={(e) =>
-                    onChangeUploadData(e, UploadCertificateDataType.certificate)
-                  }
-                />
-              </Button>
-              <Typography
-                component="p"
-                color={theme.palette.text.disabled}
-                css={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  marginLeft: theme.spacing(2),
-                  ...ellipsis(),
-                }}
-              >
-                {uploadData.certificate.name || "Certificate*"}
-              </Typography>
-            </section>
-
-            <section css={{ display: "flex" }}>
-              <Button variant="outlined" component="label" size="small">
-                <CloudUploadIcon fontSize="small" />
-                <VisuallyHiddenInput
-                  type="file"
-                  onChange={(e) =>
-                    onChangeUploadData(e, UploadCertificateDataType.privateKey)
-                  }
-                />
-              </Button>
-              <Typography
-                component="p"
-                color={theme.palette.text.disabled}
-                css={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  marginLeft: theme.spacing(2),
-                  ...ellipsis(),
-                }}
-              >
-                {uploadData.privateKey.name || "Private key*"}
-              </Typography>
-            </section>
-
-            <section
-              css={{
-                display: "flex",
-                alignItems: "center",
-              }}
-            >
-              <Button variant="outlined" component="label" size="small">
-                <CloudUploadIcon fontSize="small" />
-                <VisuallyHiddenInput
-                  type="file"
-                  onChange={(e) =>
-                    onChangeUploadData(
-                      e,
-                      UploadCertificateDataType.issuerCertificate
-                    )
-                  }
-                />
-              </Button>
-              <Typography
-                component="p"
-                color={theme.palette.text.disabled}
-                css={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  marginLeft: theme.spacing(2),
-                  ...ellipsis(),
-                }}
-              >
-                {uploadData.issuerCertificate.name || "Issuer certificate"}
-              </Typography>
-              {!!uploadData.issuerCertificate.value && (
-                <IconButton
-                  size="small"
-                  sx={{ color: theme.palette.text.disabled }}
-                  onClick={clearIssuerCertificate}
-                >
-                  <CancelRoundedIcon fontSize="small" />
-                </IconButton>
-              )}
-            </section>
+            <UploadRow
+              fileName={uploadData.certificate.name}
+              defaultFileName="Certificate*"
+              showClearButton={false}
+              onChangeUploadData={(e) =>
+                onChangeUploadData(e, UploadCertificateDataType.certificate)
+              }
+            />
+            <UploadRow
+              fileName={uploadData.privateKey.name}
+              defaultFileName="Private key*"
+              showClearButton={false}
+              onChangeUploadData={(e) =>
+                onChangeUploadData(e, UploadCertificateDataType.privateKey)
+              }
+            />
+            <UploadRow
+              fileName={uploadData.issuerCertificate.name}
+              defaultFileName="Issuer certificate"
+              showClearButton={!!uploadData.issuerCertificate.value}
+              inputRef={issuerCertificateInputRef}
+              onChangeUploadData={(e) =>
+                onChangeUploadData(
+                  e,
+                  UploadCertificateDataType.issuerCertificate
+                )
+              }
+              clearCallback={clearIssuerCertificate}
+            />
           </Stack>
         </FormControl>
       </DialogContent>
       <DialogActions>
-        <Button variant="contained" onClick={onSubmit}>
+        <Button variant="outlined" onClick={onSubmit}>
           Confirm
         </Button>
-        <Button variant="contained" onClick={onClose}>
+        <Button variant="outlined" onClick={onClose}>
           Cancel
         </Button>
       </DialogActions>

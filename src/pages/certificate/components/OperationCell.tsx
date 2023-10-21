@@ -41,6 +41,7 @@ const OperationCell: FC<{
       >
         {cert.expire <= 0 && (
           <LoadingButton
+            sx={{ minWidth: theme.spacing(12) }}
             size="small"
             onClick={() => onApplyCert(cert.id)}
             endIcon={<PlaylistAddSharpIcon />}
@@ -53,6 +54,7 @@ const OperationCell: FC<{
         )}
         {cert.expire > 0 && (
           <LoadingButton
+            sx={{ minWidth: theme.spacing(12) }}
             size="small"
             onClick={() => onRenewCert(cert.id)}
             endIcon={<Refresh />}
@@ -64,6 +66,7 @@ const OperationCell: FC<{
           </LoadingButton>
         )}
         <LoadingButton
+          sx={{ minWidth: theme.spacing(12) }}
           size="small"
           onClick={() => onOpenUploadDialog(cert.id)}
           endIcon={<FileUpload />}
